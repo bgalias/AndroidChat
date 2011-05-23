@@ -1,5 +1,8 @@
 package de.leuphana.tdi.androidchat;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +25,16 @@ public class AndroidChat extends Activity {
 
 		@Override
 		protected String doInBackground(Integer... params) {
-//			publishProgress(values);
+			try {
+				DatagramSocket clientSocket = new DatagramSocket(params[0]);
+				DatagramPacket packet = new DatagramPacket(new byte[512], 512);
+				
+				while(true){
+					clientSocket.receive(packet);
+					publishProgress(new String(packet.getData(),0,packet.getLength()));
+				}
+			} catch (Exception e) {
+			}
 			return null;
 		}
     	

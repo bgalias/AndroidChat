@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
+    <EditText android:layout_height="wrap_content" 
+    android:text="EditText" 
+    android:layout_width="200dip"
+    android:id="@+id/editText1" 
+    android:layout_alignParentLeft="true" 
     />
-</LinearLayout>
+</RelativeLayout>
