@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    <EditText android:layout_height="wrap_content" 
-    android:text="EditText" 
-    android:layout_width="200dip"
-    android:id="@+id/editText1" 
-    android:layout_alignParentLeft="true" 
-    />
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<Button android:id="@+id/button1" android:layout_height="wrap_content"
+		android:text="Button" android:layout_width="wrap_content"
+		android:layout_alignParentLeft="true"></Button>
 </RelativeLayout>
