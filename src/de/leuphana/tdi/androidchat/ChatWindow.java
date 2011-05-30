@@ -30,7 +30,6 @@ public class ChatWindow extends ListActivity {
 	public void onPause() {
 		chatClient = null;
 		super.onPause();
-		this.finish();
 	}
 
 	@Override
@@ -49,7 +48,15 @@ public class ChatWindow extends ListActivity {
 
 		send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				ChatListItem item = new ChatListItem();
+				item.setUsername("testUser");
+				item.setMessage("testMessagestMes sagestMessages tMessagestM essa"
+						+ "gestMessage stMessage stMessages tMessagestMe"
+						+ "ssa gestM essa gestM essag estMessage stMessage stMess"
+						+ "agestM essag estMes sagestMessa gestMessages tMessagest"
+						+ "Messa gest Messa gestMes sagestMessagestMess agestMessage"
+						+ "stM essage stMessa gestMess agestMessagestM essages t es sage");
+				menuAdapter.add(item);
 			}
 		});
 
@@ -97,22 +104,17 @@ public class ChatWindow extends ListActivity {
 			String ip = (String) params[0];
 			int port = (Integer) params[1];
 			try {
-				 Socket clientSocket = new Socket(ip, port);
+				Socket clientSocket = new Socket(ip, port);
 			} catch (UnknownHostException e) {
 				Log.e("CLIENT", e.getMessage());
 			} catch (IOException e) {
 				Log.e("CLIENT", e.getMessage());
 			}
-			ChatListItem item = new ChatListItem();
-			item.setUsername("testUser");
-			item.setMessage("testMessage");
-			publishProgress(item);
 			return null;
 		}
 
 		@Override
 		protected void onProgressUpdate(ChatListItem... params) {
-			menuAdapter.add(params[0]);
 		}
 
 		@Override
