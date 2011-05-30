@@ -1,25 +1,24 @@
 package de.leuphana.tdi.androidchat;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 class ChatClient extends AsyncTask<Object, String, String> {
 
 	@Override
 	protected String doInBackground(Object... params) {
-		int port = 14911;
+		String ip = (String) params[0];
+		int port = (Integer) params[1];
 		try {
-			DatagramSocket clientSocket = new DatagramSocket(port);
-			DatagramPacket packet = new DatagramPacket(new byte[512], 512);
-
-			while (true) {
-				clientSocket.receive(packet);
-				publishProgress(new String(packet.getData(), 0,
-						packet.getLength()));
-			}
-		} catch (Exception e) {
+			Socket clientSocket = new Socket(ip, port);
+		} catch (UnknownHostException e) {
+			Log.e("CLIENT", e.getMessage());
+		} catch (IOException e) {
+			Log.e("CLIENT", e.getMessage());
 		}
 		return null;
 	}

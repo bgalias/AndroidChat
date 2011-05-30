@@ -21,6 +21,16 @@
 			android:text="" android:id="@+id/editText_username" />
 	</TableRow>
 
+	<TableRow android:id="@+id/tableRow_ip" android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<TextView android:text="IP-Adresse:" android:id="@+id/textView_ip"
+			android:textSize="20sp" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<EditText android:layout_width="wrap_content"
+			android:gravity="right" android:layout_height="wrap_content"
+			android:text="192.168.1.23" android:id="@+id/editText_ip" />
+	</TableRow>
+
 	<TableRow android:id="@+id/tableRow_port"
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
 		<TextView android:text="Port:" android:id="@+id/textView_port"
@@ -28,7 +38,7 @@
 			android:layout_height="wrap_content" />
 		<EditText android:layout_width="wrap_content"
 			android:gravity="right" android:layout_height="wrap_content"
-			android:text="" android:id="@+id/editText_port" />
+			android:text="14911" android:id="@+id/editText_port" />
 	</TableRow>
 
 	<TableRow android:id="@+id/tableRow_buttons"
@@ -37,9 +47,8 @@
 		<Button android:text="Client" android:id="@+id/button_client"
 			android:layout_weight="1" android:layout_width="0dip"
 			android:layout_height="wrap_content" />
-		<Button android:text="Server" android:id="@+id/button_server"
-			android:layout_weight="1" android:layout_width="0dip"
-			android:layout_height="wrap_content" />
+		<!-- <Button android:text="Server" android:id="@+id/button_server" android:layout_weight="1" 
+			android:layout_width="0dip" android:layout_height="wrap_content" /> -->
 	</TableRow>
 
 </TableLayout>
