@@ -12,15 +12,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class ChatWindow extends ListActivity {
 	private ArrayList<ChatListItem> chatListItems;
 	private MenuAdapter menuAdapter;
-	
+	private EditText message;
+	private Button send;
+	private ChatClient chatClient;
+
 	@Override
-	public void onPause(){
+	public void onPause() {
+		chatClient = null;
 		super.onPause();
 		this.finish();
 	}
@@ -35,6 +43,19 @@ public class ChatWindow extends ListActivity {
 		this.menuAdapter = new MenuAdapter(this, R.layout.chatrow,
 				chatListItems);
 		setListAdapter(this.menuAdapter);
+
+		message = (EditText) findViewById(R.id.editText_message);
+		send = (Button) findViewById(R.id.button_sendMessage);
+
+		send.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+
+			}
+		});
+
+		Object[] params = { "192.168.1.23", 14911 };
+		chatClient = new ChatClient();
+		chatClient.execute(params);
 	}
 
 	private class MenuAdapter extends ArrayAdapter<ChatListItem> {
@@ -55,45 +76,43 @@ public class ChatWindow extends ListActivity {
 			}
 			ChatListItem o = items.get(position);
 			if (o != null) {
-				// TextView itemDiscription = (TextView)
-				// v.findViewById(R.id.discription);
-				// TextView itemDate = (TextView) v.findViewById(R.id.date);
-				// TextView itemContent = (TextView)
-				// v.findViewById(R.id.content);
-				//
-				// if (itemDiscription != null) {
-				// itemDiscription.setText(o.getDiscription());
-				// }
-				// if (itemDate != null) {
-				// itemDate.setText(o.getDate());
-				// }
-				// if (itemContent != null) {
-				// itemContent.setText(o.getContent());
+				TextView messageName = (TextView) findViewById(R.id.textView_messagename);
+				TextView messageContent = (TextView) findViewById(R.id.textView_messagecontent);
+
+				if (o.getUsername() != null && o.getMessage() != null) {
+					if (messageName != null && messageContent != null) {
+						messageName.setText(o.getUsername());
+						messageContent.setText(o.getMessage());
+					}
+				}
 			}
 			return v;
 		}
 	}
 
-	private class ChatClient extends AsyncTask<Object, String, String> {
+	private class ChatClient extends AsyncTask<Object, ChatListItem, String> {
 
 		@Override
 		protected String doInBackground(Object... params) {
 			String ip = (String) params[0];
 			int port = (Integer) params[1];
 			try {
-				Socket clientSocket = new Socket(ip, port);
+				 Socket clientSocket = new Socket(ip, port);
 			} catch (UnknownHostException e) {
 				Log.e("CLIENT", e.getMessage());
 			} catch (IOException e) {
 				Log.e("CLIENT", e.getMessage());
 			}
+			ChatListItem item = new ChatListItem();
+			item.setUsername("testUser");
+			item.setMessage("testMessage");
+			publishProgress(item);
 			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(String... params) {
-			// for (int i = 0; i < anamnesisMenuItems.size(); i++)
-			// menuAdapter.add(anamnesisMenuItems.get(i));
+		protected void onProgressUpdate(ChatListItem... params) {
+			menuAdapter.add(params[0]);
 		}
 
 		@Override
