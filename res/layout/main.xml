@@ -47,8 +47,6 @@
 		<Button android:text="Client" android:id="@+id/button_client"
 			android:layout_weight="1" android:layout_width="0dip"
 			android:layout_height="wrap_content" />
-		<!-- <Button android:text="Server" android:id="@+id/button_server" android:layout_weight="1" 
-			android:layout_width="0dip" android:layout_height="wrap_content" /> -->
 	</TableRow>
 
 </TableLayout>

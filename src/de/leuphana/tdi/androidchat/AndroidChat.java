@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class AndroidChat extends Activity implements OnClickListener {
 
 	private EditText editIp, editPort, editusername;
-	private Button buttonClient, buttonServer;
+	private Button buttonClient;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -23,7 +23,6 @@ public class AndroidChat extends Activity implements OnClickListener {
 		editIp = (EditText) findViewById(R.id.editText_ip);
 		editPort = (EditText) findViewById(R.id.editText_port);
 		buttonClient = (Button) findViewById(R.id.button_client);
-		// buttonServer = (Button) findViewById(R.id.button_server);
 		
 		buttonClient.setOnClickListener(this);
 	}
