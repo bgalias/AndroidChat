@@ -1,6 +1,10 @@
 package de.leuphana.tdi.androidchat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -48,19 +52,23 @@ public class ChatWindow extends ListActivity {
 
 		send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				ChatListItem item = new ChatListItem();
-				item.setUsername("testUser");
-				item.setMessage("testMessagestMes sagestMessages tMessagestM essa"
-						+ "gestMessage stMessage stMessages tMessagestMe"
-						+ "ssa gestM essa gestM essag estMessage stMessage stMess"
-						+ "agestM essag estMes sagestMessa gestMessages tMessagest"
-						+ "Messa gest Messa gestMes sagestMessagestMess agestMessage"
-						+ "stM essage stMessa gestMess agestMessagestM essages t es sage");
-				menuAdapter.add(item);
+				try {
+					Socket socket = new Socket("10.42.43.1", 14911);
+					PrintWriter printWriter = new PrintWriter(
+							new OutputStreamWriter(socket.getOutputStream()));
+					printWriter.print(message.getText().toString());
+					printWriter.flush();
+				} catch (UnknownHostException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
-		Object[] params = { "192.168.1.23", 14911 };
+		Object[] params = { "10.42.43.1", 14911 };
 		chatClient = new ChatClient();
 		chatClient.execute(params);
 	}
@@ -86,9 +94,9 @@ public class ChatWindow extends ListActivity {
 				TextView messageName = (TextView) findViewById(R.id.textView_messagename);
 				TextView messageContent = (TextView) findViewById(R.id.textView_messagecontent);
 
-				if (o.getUsername() != null && o.getMessage() != null) {
+				if (o.getMessage() != null) {
 					if (messageName != null && messageContent != null) {
-						messageName.setText(o.getUsername());
+						messageName.setText("USER");
 						messageContent.setText(o.getMessage());
 					}
 				}
@@ -105,6 +113,19 @@ public class ChatWindow extends ListActivity {
 			int port = (Integer) params[1];
 			try {
 				Socket clientSocket = new Socket(ip, port);
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(clientSocket.getInputStream()));
+
+				while (true) {
+					String line = null;
+					StringBuilder message = new StringBuilder();
+					while ((line = reader.readLine()) != null) {
+						message.append(line);
+					}
+					ChatListItem item = new ChatListItem();
+					item.setMessage(message.toString());
+					publishProgress(item);
+				}
 			} catch (UnknownHostException e) {
 				Log.e("CLIENT", e.getMessage());
 			} catch (IOException e) {
@@ -115,6 +136,7 @@ public class ChatWindow extends ListActivity {
 
 		@Override
 		protected void onProgressUpdate(ChatListItem... params) {
+			menuAdapter.add(params[0]);
 		}
 
 		@Override
