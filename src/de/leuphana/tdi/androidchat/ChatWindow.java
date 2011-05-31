@@ -52,12 +52,14 @@ public class ChatWindow extends ListActivity {
 
 		send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				Log.e("CHAT", "CLICK");
 				try {
-					Socket socket = new Socket("10.42.43.1", 14911);
+					Socket socket = new Socket("192.168.1.19", 14911);
 					PrintWriter printWriter = new PrintWriter(
 							new OutputStreamWriter(socket.getOutputStream()));
 					printWriter.print(message.getText().toString());
 					printWriter.flush();
+					printWriter.close();
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -68,7 +70,7 @@ public class ChatWindow extends ListActivity {
 			}
 		});
 
-		Object[] params = { "10.42.43.1", 14911 };
+		Object[] params = { "192.168.1.19", 14911 };
 		chatClient = new ChatClient();
 		chatClient.execute(params);
 	}
