@@ -29,6 +29,7 @@ public class ChatWindow extends ListActivity {
 	private EditText message;
 	private Button send;
 	private ChatClient chatClient;
+	private Socket socket;
 
 	@Override
 	public void onPause() {
@@ -49,17 +50,24 @@ public class ChatWindow extends ListActivity {
 
 		message = (EditText) findViewById(R.id.editText_message);
 		send = (Button) findViewById(R.id.button_sendMessage);
+		try {
+			socket = new Socket("192.168.1.13", 14911);
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Log.e("CHAT", "CLICK");
+				Log.e("CHAT", message.getText().toString());
 				try {
-					Socket socket = new Socket("192.168.1.19", 14911);
 					PrintWriter printWriter = new PrintWriter(
 							new OutputStreamWriter(socket.getOutputStream()));
 					printWriter.print(message.getText().toString());
 					printWriter.flush();
-					printWriter.close();
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -70,7 +78,7 @@ public class ChatWindow extends ListActivity {
 			}
 		});
 
-		Object[] params = { "192.168.1.19", 14911 };
+		Object[] params = { "192.168.1.13", 14911 };
 		chatClient = new ChatClient();
 		chatClient.execute(params);
 	}
@@ -114,11 +122,10 @@ public class ChatWindow extends ListActivity {
 			String ip = (String) params[0];
 			int port = (Integer) params[1];
 			try {
-				Socket clientSocket = new Socket(ip, port);
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(clientSocket.getInputStream()));
-
 				while (true) {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(socket.getInputStream()));
+
 					String line = null;
 					StringBuilder message = new StringBuilder();
 					while ((line = reader.readLine()) != null) {
