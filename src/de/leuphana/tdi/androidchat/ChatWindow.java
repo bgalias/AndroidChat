@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ public class ChatWindow extends ListActivity {
 	private EditText message;
 	private Button send;
 	private ChatClient chatClient;
-	private Socket socket;
 
 	@Override
 	public void onPause() {
@@ -50,24 +50,18 @@ public class ChatWindow extends ListActivity {
 
 		message = (EditText) findViewById(R.id.editText_message);
 		send = (Button) findViewById(R.id.button_sendMessage);
-		try {
-			socket = new Socket("192.168.1.13", 14911);
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
+		
 		send.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Log.e("CHAT", message.getText().toString());
 				try {
+					Socket socket = new Socket("192.168.1.13", 14911);
 					PrintWriter printWriter = new PrintWriter(
 							new OutputStreamWriter(socket.getOutputStream()));
 					printWriter.print(message.getText().toString());
 					printWriter.flush();
+					printWriter.close();
+					socket.close();
 				} catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -122,15 +116,19 @@ public class ChatWindow extends ListActivity {
 			String ip = (String) params[0];
 			int port = (Integer) params[1];
 			try {
+				ServerSocket serverSocket = new ServerSocket(port);
 				while (true) {
+					Socket client = serverSocket.accept();
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(socket.getInputStream()));
+						new InputStreamReader(client.getInputStream()));
 
 					String line = null;
 					StringBuilder message = new StringBuilder();
 					while ((line = reader.readLine()) != null) {
 						message.append(line);
 					}
+					reader.close();
+					client.close();
 					ChatListItem item = new ChatListItem();
 					item.setMessage(message.toString());
 					publishProgress(item);
